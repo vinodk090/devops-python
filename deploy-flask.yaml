@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deploy
+  labels:
+    env: test
+spec:
+  template:
+    metadata:
+      name: flask-pod
+      labels:
+        env: test
+    spec:
+      containers:
+      - name: flask
+        image: vinodk090/flask-app
+        ports:
+        - containerPort: 5320
+  replicas: 1
+  selector:
+    matchLabels:
+      env: test
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+spec:
+  selector:
+    env: test
+  type: NodePort
+  ports:
+  - port: 5320
+    targetPort: 5320
+    nodePort: 30010
